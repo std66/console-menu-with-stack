@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ConsoleApp4 {
     class MenuNavigator : IMenuNavigator {
@@ -24,22 +23,20 @@ namespace ConsoleApp4 {
         public void ShowMenu(IMenu currentMenu) {
             topLevelMenu = currentMenu;
 
-            Dictionary<MenuItem, Action> items = new Dictionary<MenuItem, Action>();
+            List<MenuItem> items = new List<MenuItem>();
             currentMenu.ConfigureMenuItems(this, items);
 
             Console.Clear();
             Console.WriteLine(currentMenu.Title);
 
-            foreach (var item in items) {
-                Console.WriteLine($"[{item.Key.Key}]: {item.Key.Text}");
+            for (int i = 0; i < items.Count; i++) {
+                Console.WriteLine($"[{i + 1}]: {items[i].Text}");
             }
 
             Console.Write("Selected option: ");
             int key = Convert.ToInt32(Console.ReadLine());
 
-            MenuItem selectedItem = items.Keys.Where(x => x.Key == key).Single();
-            Action action = items[selectedItem];
-
+            Action action = items[key - 1].Action;
             action();
         }
 
